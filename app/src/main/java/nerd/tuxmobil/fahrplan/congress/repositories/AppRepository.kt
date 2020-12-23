@@ -165,7 +165,7 @@ object AppRepository {
         scheduleNetworkRepository.parseSchedule(scheduleXml, eTag,
                 onUpdateSessions = { sessions ->
                     val oldSessions = loadSessionsForAllDays(true)
-                    val newSessions = sessions.toSessionsAppModel2().sanitize()
+                    val newSessions = sessions.toSessionsAppModel2().distinctByGuid().sanitize()
                     val scheduleChanges = computeSessionsWithChangeFlags(newSessions, oldSessions)
                     if (scheduleChanges.foundChanges) {
                         updateScheduleChangesSeen(false)
@@ -180,6 +180,14 @@ object AppRepository {
                     onParsingDone(ParseScheduleResult(result, version))
                     loadShifts(okHttpClient, onLoadingShiftsDone)
                 })
+    }
+
+    private fun List<Session>.distinctByGuid(): List<Session> {
+        return distinctBy { it.guid }.also { distinctSessions ->
+            (this - distinctSessions).forEach {
+                logging.e(AppRepository.javaClass.simpleName, "Dropped non-unique session: ${it.guid}")
+            }
+        }
     }
 
     /**
