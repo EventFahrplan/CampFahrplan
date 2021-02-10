@@ -43,6 +43,7 @@ android {
             applicationIdSuffix ".debug"
             zipAlignEnabled true
             debuggable true
+            testCoverageEnabled true
         }
         release {
             zipAlignEnabled true
