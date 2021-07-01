@@ -34,6 +34,7 @@ fun Session.toHighlightDatabaseModel() = HighlightDatabaseModel(
 
 fun Session.toSessionDatabaseModel() = SessionDatabaseModel(
         sessionId = sessionId,
+        guid = guid,
         abstractt = abstractt,
         date = date,
         dateUTC = dateUTC,
@@ -75,6 +76,7 @@ fun Session.toSessionDatabaseModel() = SessionDatabaseModel(
 
 fun SessionDatabaseModel.toSessionAppModel(): Session {
     val session = Session(sessionId)
+    session.guid = guid
 
     session.abstractt = abstractt
     session.date = date
@@ -119,6 +121,7 @@ fun SessionDatabaseModel.toSessionAppModel(): Session {
 
 fun SessionNetworkModel.toSessionAppModel(): Session {
     val session = Session(sessionId)
+    session.guid = guid
 
     session.abstractt = abstractt
     session.date = date
